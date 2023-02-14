@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import { ENVIRONMENT } from '../app'
 import type { ErrorType } from '../errors/errorTypes'
+import type { DevLogVar } from './logTypes'
 
 // terminal logging color reference
 const Reset = '\x1b[0m'
@@ -17,7 +18,7 @@ const FgGreen = '\x1b[32m'
 const FgYellow = '\x1b[33m'
 // const FgBlue = '\x1b[34m'
 // const FgMagenta = '\x1b[35m'
-// const FgCyan = '\x1b[36m'
+const FgCyan = '\x1b[36m'
 // const FgWhite = '\x1b[37m'
 // const FgGray = '\x1b[90m'
 
@@ -37,44 +38,28 @@ export const logReqURL = (
   res: Response,
   next: NextFunction
 ): void => {
-  logDev(`Request URL: ${req.url}`)
+  logVars({ name: 'Request URL', value: `${req.url}` })
   next()
 }
 
 // Other Logger Functions
 export const logError = (error: ErrorType): void => {
-  console.log(
-    Underscore,
-    FgRed,
-    'Error:',
-    Reset,
-    FgRed,
-    error.logMessage,
-    Reset
-  )
+  console.log(`${FgRed}${Underscore}Error:`, error.logMessage, Reset)
 }
 
 export const logDev = (logString: string): void => {
   if (ENVIRONMENT !== 'DEVELOPMENT') return
-  console.log(
-    Underscore,
-    FgGreen,
-    'Development log:\n',
-    Reset,
-    FgGreen,
-    logString,
-    Reset
-  )
+  console.log(`${FgGreen}Dev: ${logString}${Reset}`)
+}
+
+export const logVars = (devVar: DevLogVar): void => {
+  logDev(`\t${devVar.name}: ${devVar.value}`)
 }
 
 export const logWarn = (logString: string): void => {
-  console.warn(
-    Underscore,
-    FgYellow,
-    'Warning:',
-    Reset,
-    FgYellow,
-    logString,
-    Reset
-  )
+  console.log(`${FgYellow}Warning:`, logString, Reset)
+}
+
+export const logInfo = (logString: string): void => {
+  console.log(`${FgCyan}Info: ${logString}${Reset}`)
 }
