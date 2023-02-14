@@ -4,7 +4,8 @@
   "description": "This package is used to create neural networks that can be collapsed to a function after training.",
   "main": "dist/app.js",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "dev": "tsc && node dist/app.js",
+    "prod": "tsc && ENVIRONMENT='PRODUCTION' node dist/app.js",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Testing not implemented\" && exit 0"
   },

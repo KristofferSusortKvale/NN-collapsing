@@ -1,5 +1,35 @@
 import type { Request, Response, NextFunction } from 'express'
-import { ErrorType } from '../errors/errorTypes'
+import { ENVIRONMENT } from '../app'
+import type { ErrorType } from '../errors/errorTypes'
+
+// terminal logging color reference
+const Reset = '\x1b[0m'
+// const Bright = '\x1b[1m'
+// const Dim = '\x1b[2m'
+const Underscore = '\x1b[4m'
+// const Blink = '\x1b[5m'
+// const Reverse = '\x1b[7m'
+// const Hidden = '\x1b[8m'
+
+// const FgBlack = '\x1b[30m'
+const FgRed = '\x1b[31m'
+const FgGreen = '\x1b[32m'
+const FgYellow = '\x1b[33m'
+// const FgBlue = '\x1b[34m'
+// const FgMagenta = '\x1b[35m'
+// const FgCyan = '\x1b[36m'
+// const FgWhite = '\x1b[37m'
+// const FgGray = '\x1b[90m'
+
+// const BgBlack = '\x1b[40m'
+// const BgRed = '\x1b[41m'
+// const BgGreen = '\x1b[42m'
+// const BgYellow = '\x1b[43m'
+// const BgBlue = '\x1b[44m'
+// const BgMagenta = '\x1b[45m'
+// const BgCyan = '\x1b[46m'
+// const BgWhite = '\x1b[47m'
+// const BgGray = '\x1b[100m'
 
 // Middlewares
 export const logReqURL = (
@@ -7,11 +37,44 @@ export const logReqURL = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.log('Request URL: ', req.url)
+  logDev(`Request URL: ${req.url}`)
   next()
 }
 
 // Other Logger Functions
-export const logError = (error: ErrorType) => {
-  console.log('Error: ', error.logMessage)
+export const logError = (error: ErrorType): void => {
+  console.log(
+    Underscore,
+    FgRed,
+    'Error:',
+    Reset,
+    FgRed,
+    error.logMessage,
+    Reset
+  )
+}
+
+export const logDev = (logString: string): void => {
+  if (ENVIRONMENT !== 'DEVELOPMENT') return
+  console.log(
+    Underscore,
+    FgGreen,
+    'Development log:\n',
+    Reset,
+    FgGreen,
+    logString,
+    Reset
+  )
+}
+
+export const logWarn = (logString: string): void => {
+  console.warn(
+    Underscore,
+    FgYellow,
+    'Warning:',
+    Reset,
+    FgYellow,
+    logString,
+    Reset
+  )
 }

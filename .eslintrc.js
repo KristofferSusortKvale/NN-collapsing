@@ -3,12 +3,14 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: "standard-with-typescript",
+  extends: 'standard-with-typescript',
   overrides: [],
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: "./tsconfig.json",
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: './tsconfig.json',
   },
-  rules: {},
-};
+  rules: {
+    '@typescript-eslint/comma-dangle': ['error', 'only-multiline'],
+  },
+}

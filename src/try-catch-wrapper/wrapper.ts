@@ -1,16 +1,17 @@
-import { Request, Response, NextFunction } from 'express'
-import { unexpectedError } from '../errors/errors'
-import { ErrorType } from '../errors/errorTypes'
 import { logError } from '../logger/logger'
-import { catchHandler, endpointHandler } from './tryCatchWrapperTypes'
+
+import type { Request, Response, NextFunction } from 'express'
+import type { ErrorType } from '../errors/errorTypes'
+import type { CatchHandler, EndpointHandler } from './tryCatchWrapperTypes'
+import { unhandledError } from '../errors/errors'
 
 export const tryCatchWrapper = (
-  handler: endpointHandler,
-  catchHandler: catchHandler,
+  handler: EndpointHandler,
+  catchHandler: CatchHandler,
   req: Request,
   res: Response,
   next?: NextFunction
-) => {
+): void => {
   try {
     handler(req, res, next)
   } catch (e) {
@@ -22,16 +23,15 @@ export const tryCatchWrapper = (
 }
 
 export const unhandledErrorsWrapper = (
-  handler: endpointHandler,
+  handler: EndpointHandler,
   req: Request,
   res: Response,
   next?: NextFunction
-) => {
+): void => {
   try {
     handler(req, res, next)
   } catch (e) {
-    const error = unexpectedError(e)
-    logError(error)
-    res.status(error.status).send(error.userMessage)
+    logError(unhandledError)
+    res.status(unhandledError.status).send(unhandledError.userMessage)
   }
 }
